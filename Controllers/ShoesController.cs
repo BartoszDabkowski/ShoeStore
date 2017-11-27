@@ -9,22 +9,22 @@ using ShoeStore.Persistence;
 
 namespace ShoeStore.Controllers
 {
-    public class BrandsController : Controller
+    public class ShoesController : Controller
     {
         private readonly ShoeStoreDbContext _context;
         private readonly IMapper mapper;
-        public BrandsController(ShoeStoreDbContext context, IMapper mapper)
+        public ShoesController(ShoeStoreDbContext context, IMapper mapper)
         {
             this.mapper = mapper;
             _context = context;
         }
 
-        [HttpGet("api/brands")]
-        public async Task<IEnumerable<BrandResource>> GetBrandsAsync()
+        [HttpGet("api/shoes")]
+        public async Task<IEnumerable<ShoeResource>> GetBrandsAsync()
         {
-            var brands = await _context.Brands.Include(b => b.Shoes).ToListAsync();
+            var shoes = await _context.Shoes.ToListAsync();
 
-            return mapper.Map<List<Brand>,List<BrandResource>>(brands);
+            return mapper.Map<List<Shoe>,List<ShoeResource>>(shoes);
         }
     }
 }
