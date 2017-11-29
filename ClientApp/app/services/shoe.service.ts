@@ -12,4 +12,14 @@ export class ShoeService {
       .map(res => res.json());
   }
 
+  getStyles(){
+    return this.http.get('api/styles')
+      .map(res => res.json());
+  }
+
+  getBrands(){
+    return this.http.get('api/brands')
+      .map(res => res.json());
+  }
+
 }

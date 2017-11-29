@@ -12,5 +12,13 @@
     <label for="name">Name</label>
     <input id="name" class="form-control"/>
   </div>
+
+  <div *ngFor="let s of styles" class="form-check">
+    <label class="form-check-label">
+      <input class="form-check-input" type="checkbox" value="{{s.id}}">
+      {{s.name}}
+    </label>
+  </div>
+
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

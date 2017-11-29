@@ -1,6 +1,6 @@
+import { ShoeService } from '../../services/shoe.service';
 import { Subscription } from 'rxjs/Rx';
 import { Brand } from '../../models/brand';
-import { BrandService } from '../../services/brand.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -10,11 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShoeFormComponent implements OnInit {
 brands: Subscription;
-  constructor(private brandService: BrandService) { }
+styles: Subscription;
+  constructor(private shoeService: ShoeService) { }
 
   ngOnInit() {
-    this.brands = this.brandService.getBrands().subscribe(brands =>
+    this.brands = this.shoeService.getBrands().subscribe(brands =>
       this.brands = brands);
-  }
 
+    this.styles = this.shoeService.getStyles().subscribe(styles =>
+      this.styles = styles);
+  }
 }
