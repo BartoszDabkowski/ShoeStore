@@ -1,0 +1,16 @@
+<form>
+
+  <div class="form-group">
+    <label for="brand">Brand</label>
+    <select id="brand" class="form-control">
+      <option value=""></option>
+      <option *ngFor="let b of brands" value="{{ b.id }}">{{ b.name }}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input id="name" class="form-control"/>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

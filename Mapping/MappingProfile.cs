@@ -10,6 +10,7 @@ namespace ShoeStore.Mapping
         {
             CreateMap<Brand, BrandResource>();
             CreateMap<Shoe, ShoeResource>();
+            CreateMap<Style, KeyValuePairResource>();
         }
     }
 }
