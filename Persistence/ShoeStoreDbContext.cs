@@ -9,6 +9,8 @@ namespace ShoeStore.Persistence
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Style> Styles { get; set; }
         public DbSet<ShoeStyle> ShoeStyles { get; set; }
+        public DbSet<Color> Colors { get; set; }
+        public DbSet<ShoeColor> ShoeColor { get; set; }
 
         public ShoeStoreDbContext(DbContextOptions<ShoeStoreDbContext> options) 
             : base(options)
@@ -29,6 +31,19 @@ namespace ShoeStore.Persistence
                 .HasOne(st => st.Style)
                 .WithMany(ss => ss.ShoeStyles)
                 .HasForeignKey(st => st.StyleId);
+
+            modelBuilder.Entity<ShoeColor>().HasKey(sc => 
+              new { sc.ShoeId, sc.ColorId });
+
+            modelBuilder.Entity<ShoeColor>()
+                .HasOne(s => s.Shoe)
+                .WithMany(sc => sc.ShoeColors)
+                .HasForeignKey(s => s.ShoeId);
+
+            modelBuilder.Entity<ShoeColor>()
+                .HasOne(c => c.Color)
+                .WithMany(sc => sc.ShoeColors)
+                .HasForeignKey(c =>c.ColorId);
         }
     }
 }

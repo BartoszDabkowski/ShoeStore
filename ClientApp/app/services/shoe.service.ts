@@ -13,7 +13,7 @@ export class ShoeService {
   }
 
   getStyles(){
-    return this.http.get('api/styles')
+    return this.http.get('api/shoes/styles')
       .map(res => res.json());
   }
 

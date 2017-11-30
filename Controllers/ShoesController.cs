@@ -20,11 +20,19 @@ namespace ShoeStore.Controllers
         }
 
         [HttpGet("api/shoes")]
-        public async Task<IEnumerable<ShoeResource>> GetBrandsAsync()
+        public async Task<IEnumerable<ShoeResource>> GetShoesAsync()
         {
             var shoes = await _context.Shoes.ToListAsync();
 
             return mapper.Map<List<Shoe>,List<ShoeResource>>(shoes);
+        }
+
+        [HttpGet("api/shoes/styles")]
+        public async Task<IEnumerable<KeyValuePairResource>> GetStylesAsync()
+        {
+            var styles = await _context.Styles.ToListAsync();
+
+            return mapper.Map<List<Style>,List<KeyValuePairResource>>(styles);
         }
     }
 }

@@ -4,21 +4,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ShoeStore.Models
 {
-    public class Shoe
+    public class Color
     {
-        public int Id { get; set; } 
-        
+        public int Id { get; set; }
+
         [Required]
         [StringLength(255)]
         public string Name { get; set; }
-        public Brand Brand { get; set; }
-        public int BrandId { get; set; }
-        public ICollection<ShoeStyle> ShoeStyles { get; set; }
         public ICollection<ShoeColor> ShoeColors { get; set; }
 
-        public Shoe()
+        public Color()
         {
-            ShoeStyles = new Collection<ShoeStyle>();
             ShoeColors = new Collection<ShoeColor>();
         }
     }
