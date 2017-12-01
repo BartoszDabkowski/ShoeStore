@@ -11,6 +11,8 @@ import { Component, OnInit } from '@angular/core';
 export class ShoeFormComponent implements OnInit {
 brands: Subscription;
 styles: Subscription;
+colors: Subscription;
+
   constructor(private shoeService: ShoeService) { }
 
   ngOnInit() {
@@ -19,5 +21,8 @@ styles: Subscription;
 
     this.styles = this.shoeService.getStyles().subscribe(styles =>
       this.styles = styles);
+
+    this.colors = this.shoeService.getColors().subscribe(colors =>
+      this.colors = colors);
   }
 }

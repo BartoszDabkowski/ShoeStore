@@ -9,6 +9,7 @@ using ShoeStore.Persistence;
 
 namespace ShoeStore.Controllers
 {
+    [Route("api/shoes")]    
     public class ShoesController : Controller
     {
         private readonly ShoeStoreDbContext _context;
@@ -19,20 +20,46 @@ namespace ShoeStore.Controllers
             _context = context;
         }
 
-        [HttpGet("api/shoes")]
+        [HttpGet]
         public async Task<IEnumerable<ShoeResource>> GetShoesAsync()
         {
             var shoes = await _context.Shoes.ToListAsync();
 
-            return mapper.Map<List<Shoe>,List<ShoeResource>>(shoes);
+            return mapper.Map<List<Shoe>, List<ShoeResource>>(shoes);
         }
 
-        [HttpGet("api/shoes/styles")]
+        [HttpPost]
+        public IActionResult PostShoes([FromBody] ShoeUploadResource shoeUploadResource)
+        {
+            var shoe = mapper.Map<ShoeUploadResource, Shoe>(shoeUploadResource);
+
+            _context.Shoes.Add(shoe);
+            
+            return Ok();
+        }
+
+        [HttpGet("styles")]
         public async Task<IEnumerable<KeyValuePairResource>> GetStylesAsync()
         {
             var styles = await _context.Styles.ToListAsync();
 
             return mapper.Map<List<Style>,List<KeyValuePairResource>>(styles);
+        }
+
+        [HttpGet("colors")]
+        public async Task<IEnumerable<KeyValuePairResource>> GetColorsAsync()
+        {
+            var colors = await _context.Colors.ToListAsync();
+
+            return mapper.Map<List<Color>,List<KeyValuePairResource>>(colors);
+        }
+
+        [HttpGet("sizes")]
+        public async Task<IEnumerable<KeyValuePairResource>> GetSizesAsync()
+        {
+            var sizes = await _context.Sizes.ToListAsync();
+
+            return mapper.Map<List<Size>,List<KeyValuePairResource>>(sizes);
         }
     }
 }

@@ -13,11 +13,23 @@
     <input id="name" class="form-control"/>
   </div>
 
-  <div *ngFor="let s of styles" class="form-check">
-    <label class="form-check-label" for="style-{{ s.id }}">
-      <input class="form-check-input" id="style-{{ s.id }}" type="checkbox" value="{{s.id}}">
-      {{s.name}}
-    </label>
+  <div class="row">
+    <div class="col-sm">
+      <div *ngFor="let s of styles" class="form-check">
+        <label class="form-check-label" for="style-{{ s.id }}">
+          <input class="form-check-input" id="style-{{ s.id }}" type="checkbox" value="{{s.id}}">
+          {{s.name}}
+        </label>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div *ngFor="let c of colors" class="form-check">
+        <label class="form-check-label" for="color-{{ c.id }}">
+          <input class="form-check-input" id="color-{{ c.id }}" type="checkbox" value="{{c.id}}">
+          {{c.name}}
+        </label>
+      </div>
+    </div>
   </div>
 
   <button type="submit" class="btn btn-primary">Submit</button>

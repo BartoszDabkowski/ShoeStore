@@ -11,6 +11,7 @@ namespace ShoeStore.Persistence
         public DbSet<ShoeStyle> ShoeStyles { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<ShoeColor> ShoeColor { get; set; }
+        public DbSet<Size> Sizes { get; set; }
 
         public ShoeStoreDbContext(DbContextOptions<ShoeStoreDbContext> options) 
             : base(options)

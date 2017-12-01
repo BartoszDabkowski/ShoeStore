@@ -17,9 +17,13 @@ export class ShoeService {
       .map(res => res.json());
   }
 
+  getColors(){
+    return this.http.get('api/shoes/colors')
+      .map(res => res.json());
+  }
+
   getBrands(){
     return this.http.get('api/brands')
       .map(res => res.json());
   }
-
 }

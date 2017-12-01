@@ -8,16 +8,16 @@ namespace ShoeStore.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("INSERT INTO Styles (Name) VALUES ('Black')"); 
-            migrationBuilder.Sql("INSERT INTO Styles (Name) VALUES ('Brown')"); 
-            migrationBuilder.Sql("INSERT INTO Styles (Name) VALUES ('Walnut')"); 
-            migrationBuilder.Sql("INSERT INTO Styles (Name) VALUES ('Oxblood')"); 
-            migrationBuilder.Sql("INSERT INTO Styles (Name) VALUES ('Navy')"); 
+            migrationBuilder.Sql("INSERT INTO Colors (Name) VALUES ('Black')"); 
+            migrationBuilder.Sql("INSERT INTO Colors (Name) VALUES ('Brown')"); 
+            migrationBuilder.Sql("INSERT INTO Colors (Name) VALUES ('Walnut')"); 
+            migrationBuilder.Sql("INSERT INTO Colors (Name) VALUES ('Oxblood')"); 
+            migrationBuilder.Sql("INSERT INTO Colors (Name) VALUES ('Navy')"); 
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"DELETE FROM Styles WHERE Name IN (
+            migrationBuilder.Sql(@"DELETE FROM Colors WHERE Name IN (
                 'Black',
                 'Brown',
                 'Walnut',
