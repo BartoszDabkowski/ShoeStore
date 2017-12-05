@@ -28,8 +28,22 @@ namespace ShoeStore.Controllers
             return mapper.Map<List<Shoe>, List<ShoeResource>>(shoes);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetShoeAsync(int id)
+        {
+            var shoe = await _context.Shoes
+                .Include(s => s.ShoeStyles)
+                .Include(s => s.ShoeColors)
+                .SingleOrDefaultAsync(s => s.Id == id);
+
+            if(shoe == null)
+                return NotFound();
+
+            return Ok(mapper.Map<Shoe, ShoeUploadResource>(shoe));
+        }
+
         [HttpPost]
-        public async Task<IActionResult> PostShoes([FromBody] ShoeUploadResource shoeUploadResource)
+        public async Task<IActionResult> PostShoesAsync([FromBody] ShoeUploadResource shoeUploadResource)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -45,7 +59,7 @@ namespace ShoeStore.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateShoes(int id, [FromBody] ShoeUploadResource shoeUploadResource)
+        public async Task<IActionResult> UpdateShoesAsync(int id, [FromBody] ShoeUploadResource shoeUploadResource)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -55,6 +69,9 @@ namespace ShoeStore.Controllers
                 .Include(s => s.ShoeColors)
                 .SingleOrDefaultAsync(s => s.Id == id);
 
+            if(shoe == null)
+                return NotFound();
+
             mapper.Map<ShoeUploadResource, Shoe>(shoeUploadResource, shoe);
 
             await _context.SaveChangesAsync();
@@ -62,6 +79,19 @@ namespace ShoeStore.Controllers
             var result = mapper.Map<Shoe, ShoeUploadResource>(shoe);
             
             return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteShoeAsync(int id){
+            var shoe = await _context.Shoes.FindAsync(id);
+
+            if(shoe == null)
+                return NotFound();
+
+            _context.Remove(shoe);
+            await _context.SaveChangesAsync();
+
+            return Ok(id);
         }
 
         [HttpGet("styles")]
