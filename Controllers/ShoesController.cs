@@ -29,13 +29,39 @@ namespace ShoeStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostShoes([FromBody] ShoeUploadResource shoeUploadResource)
+        public async Task<IActionResult> PostShoes([FromBody] ShoeUploadResource shoeUploadResource)
         {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var shoe = mapper.Map<ShoeUploadResource, Shoe>(shoeUploadResource);
 
             _context.Shoes.Add(shoe);
+            await _context.SaveChangesAsync();
+
+            var result = mapper.Map<Shoe, ShoeUploadResource>(shoe);
             
-            return Ok();
+            return Ok(result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateShoes(int id, [FromBody] ShoeUploadResource shoeUploadResource)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var shoe = await _context.Shoes
+                .Include(s => s.ShoeStyles)
+                .Include(s => s.ShoeColors)
+                .SingleOrDefaultAsync(s => s.Id == id);
+
+            mapper.Map<ShoeUploadResource, Shoe>(shoeUploadResource, shoe);
+
+            await _context.SaveChangesAsync();
+
+            var result = mapper.Map<Shoe, ShoeUploadResource>(shoe);
+            
+            return Ok(result);
         }
 
         [HttpGet("styles")]
