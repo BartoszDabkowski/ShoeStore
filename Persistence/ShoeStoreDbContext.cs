@@ -25,7 +25,7 @@ namespace ShoeStore.Persistence
 
             modelBuilder.Entity<ShoeStyle>()
                 .HasOne(sh => sh.Shoe)
-                .WithMany(ss => ss.ShoeStyles)
+                .WithMany(ss => ss.Styles)
                 .HasForeignKey(sh => sh.ShoeId);
 
             modelBuilder.Entity<ShoeStyle>()
@@ -38,7 +38,7 @@ namespace ShoeStore.Persistence
 
             modelBuilder.Entity<ShoeColor>()
                 .HasOne(s => s.Shoe)
-                .WithMany(sc => sc.ShoeColors)
+                .WithMany(sc => sc.Colors)
                 .HasForeignKey(s => s.ShoeId);
 
             modelBuilder.Entity<ShoeColor>()

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ShoeStore.Controllers.Resources
 {
-    public class ShoeUploadResource
+    public class SaveShoeResource
     {
         [Required]
         public int BrandId { get; set; } 
@@ -13,7 +13,7 @@ namespace ShoeStore.Controllers.Resources
         public ICollection<int> Styles { get; set; }
         public ICollection<int> Colors { get; set; }
 
-        public ShoeUploadResource()
+        public SaveShoeResource()
         {
             Styles = new Collection<int>();
             Colors = new Collection<int>();

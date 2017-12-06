@@ -13,13 +13,13 @@ namespace ShoeStore.Models
         public string Name { get; set; }
         public Brand Brand { get; set; }
         public int BrandId { get; set; }
-        public ICollection<ShoeStyle> ShoeStyles { get; set; }
-        public ICollection<ShoeColor> ShoeColors { get; set; }
+        public ICollection<ShoeStyle> Styles { get; set; }
+        public ICollection<ShoeColor> Colors { get; set; }
 
         public Shoe()
         {
-            ShoeStyles = new Collection<ShoeStyle>();
-            ShoeColors = new Collection<ShoeColor>();
+            Styles = new Collection<ShoeStyle>();
+            Colors = new Collection<ShoeColor>();
         }
     }
 }

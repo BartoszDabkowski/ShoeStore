@@ -3,10 +3,8 @@ using System.Collections.ObjectModel;
 
 namespace ShoeStore.Controllers.Resources
 {
-    public class BrandResource
+    public class BrandResource : KeyValuePairResource
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
         public ICollection<ShoeResource> Shoes { get; set; }
 
         public BrandResource()

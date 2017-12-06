@@ -23,7 +23,13 @@ namespace ShoeStore.Controllers
         [HttpGet]
         public async Task<IEnumerable<ShoeResource>> GetShoesAsync()
         {
-            var shoes = await _context.Shoes.ToListAsync();
+            var shoes = await _context.Shoes
+                .Include(s => s.Brand)
+                .Include(s => s.Styles)
+                    .ThenInclude(ss => ss.Style)
+                .Include(s => s.Colors)
+                    .ThenInclude(sc => sc.Color)
+                .ToListAsync();
 
             return mapper.Map<List<Shoe>, List<ShoeResource>>(shoes);
         }
@@ -32,51 +38,51 @@ namespace ShoeStore.Controllers
         public async Task<IActionResult> GetShoeAsync(int id)
         {
             var shoe = await _context.Shoes
-                .Include(s => s.ShoeStyles)
-                .Include(s => s.ShoeColors)
+                .Include(s => s.Styles)
+                .Include(s => s.Colors)
                 .SingleOrDefaultAsync(s => s.Id == id);
 
             if(shoe == null)
                 return NotFound();
 
-            return Ok(mapper.Map<Shoe, ShoeUploadResource>(shoe));
+            return Ok(mapper.Map<Shoe, SaveShoeResource>(shoe));
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostShoesAsync([FromBody] ShoeUploadResource shoeUploadResource)
+        public async Task<IActionResult> PostShoesAsync([FromBody] SaveShoeResource shoeUploadResource)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var shoe = mapper.Map<ShoeUploadResource, Shoe>(shoeUploadResource);
+            var shoe = mapper.Map<SaveShoeResource, Shoe>(shoeUploadResource);
 
             _context.Shoes.Add(shoe);
             await _context.SaveChangesAsync();
 
-            var result = mapper.Map<Shoe, ShoeUploadResource>(shoe);
+            var result = mapper.Map<Shoe, SaveShoeResource>(shoe);
             
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateShoesAsync(int id, [FromBody] ShoeUploadResource shoeUploadResource)
+        public async Task<IActionResult> UpdateShoesAsync(int id, [FromBody] SaveShoeResource shoeUploadResource)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var shoe = await _context.Shoes
-                .Include(s => s.ShoeStyles)
-                .Include(s => s.ShoeColors)
+                .Include(s => s.Styles)
+                .Include(s => s.Colors)
                 .SingleOrDefaultAsync(s => s.Id == id);
 
             if(shoe == null)
                 return NotFound();
 
-            mapper.Map<ShoeUploadResource, Shoe>(shoeUploadResource, shoe);
+            mapper.Map<SaveShoeResource, Shoe>(shoeUploadResource, shoe);
 
             await _context.SaveChangesAsync();
 
-            var result = mapper.Map<Shoe, ShoeUploadResource>(shoe);
+            var result = mapper.Map<Shoe, SaveShoeResource>(shoe);
             
             return Ok(result);
         }

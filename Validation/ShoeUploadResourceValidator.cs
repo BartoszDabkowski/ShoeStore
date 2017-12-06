@@ -3,7 +3,7 @@ using ShoeStore.Controllers.Resources;
 
 namespace ShoeStore.Validation
 {
-    public class ShoeUploadResourceValidator : AbstractValidator<ShoeUploadResource>
+    public class ShoeUploadResourceValidator : AbstractValidator<SaveShoeResource>
     {
         public ShoeUploadResourceValidator () {
             RuleFor(x => x.Styles)

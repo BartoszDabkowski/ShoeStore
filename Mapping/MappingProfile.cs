@@ -12,40 +12,43 @@ namespace ShoeStore.Mapping
         {
             // Domain to API Resource
             CreateMap<Brand, BrandResource>();
-            CreateMap<Shoe, ShoeResource>();
             CreateMap<Style, KeyValuePairResource>();
             CreateMap<Color, KeyValuePairResource>();
             CreateMap<Size, KeyValuePairResource>();
-            CreateMap<Shoe, ShoeUploadResource>()
-                .ForMember(sur => sur.Styles, opt => opt.MapFrom(s => s.ShoeStyles.Select(sur => sur.StyleId)))
-                .ForMember(sur => sur.Colors, opt => opt.MapFrom(s => s.ShoeColors.Select(sur => sur.ColorId)));
+            CreateMap<Shoe, ShoeResource>()
+                .ForMember(sr => sr.Brand, opt => opt.MapFrom(s => new KeyValuePairResource{ Id = s.Brand.Id, Name = s.Brand.Name}))
+                .ForMember(sr => sr.Styles, opt => opt.MapFrom(s => s.Styles.Select(ss => new KeyValuePairResource{ Id = ss.Style.Id, Name = ss.Style.Name})))
+                .ForMember(sr => sr.Colors, opt => opt.MapFrom(s => s.Colors.Select(sc => new KeyValuePairResource{ Id = sc.Color.Id, Name = sc.Color.Name})));
+            CreateMap<Shoe, SaveShoeResource>()
+                .ForMember(sur => sur.Styles, opt => opt.MapFrom(s => s.Styles.Select(sur => sur.StyleId)))
+                .ForMember(sur => sur.Colors, opt => opt.MapFrom(s => s.Colors.Select(sur => sur.ColorId)));
 
             // API to Domain Resource
-            CreateMap<ShoeUploadResource, Shoe>()
-                .ForMember(s => s.ShoeStyles, opt => opt.Ignore())
-                .ForMember(s => s.ShoeColors, opt => opt.Ignore())
+            CreateMap<SaveShoeResource, Shoe>()
+                .ForMember(s => s.Styles, opt => opt.Ignore())
+                .ForMember(s => s.Colors, opt => opt.Ignore())
                 .AfterMap((sur, s) => {
                     // Remove unselected colors
-                    var removedColors = s.ShoeColors.Where(c => !sur.Colors.Contains(c.ColorId)).ToList();
+                    var removedColors = s.Colors.Where(c => !sur.Colors.Contains(c.ColorId)).ToList();
                     foreach(var c in removedColors)
-                        s.ShoeColors.Remove(c);
+                        s.Colors.Remove(c);
 
                     // Add new colors
-                    var addedColors = sur.Colors.Where(id => !s.ShoeColors.Any(c => c.ColorId == id))
+                    var addedColors = sur.Colors.Where(id => !s.Colors.Any(c => c.ColorId == id))
                         .Select(id => new ShoeColor {ColorId = id});
                     foreach(var c in addedColors)
-                        s.ShoeColors.Add(c);
+                        s.Colors.Add(c);
 
                     // Remove unselected styles
-                    var removedStyles = s.ShoeStyles.Where(st => !sur.Styles.Contains(st.StyleId)).ToList();
+                    var removedStyles = s.Styles.Where(st => !sur.Styles.Contains(st.StyleId)).ToList();
                     foreach(var st in removedStyles)
-                        s.ShoeStyles.Remove(st);
+                        s.Styles.Remove(st);
 
                     // Add new styles
-                    var addedStyles = sur.Styles.Where(id => !s.ShoeStyles.Any(st => st.StyleId == id))
+                    var addedStyles = sur.Styles.Where(id => !s.Styles.Any(st => st.StyleId == id))
                         .Select(id => new ShoeStyle {StyleId = id});
                     foreach(var st in addedStyles)
-                        s.ShoeStyles.Add(st);
+                        s.Styles.Add(st);
                 });
         }
     }
