@@ -11,20 +11,20 @@ namespace ShoeStore.Controllers
 {
     public class BrandsController : Controller
     {
-        private readonly ShoeStoreDbContext _context;
-        private readonly IMapper mapper;
-        public BrandsController(ShoeStoreDbContext context, IMapper mapper)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public BrandsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.mapper = mapper;
-            _context = context;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         [HttpGet("api/brands")]
         public async Task<IEnumerable<BrandResource>> GetBrandsAsync()
         {
-            var brands = await _context.Brands.Include(b => b.Shoes).ToListAsync();
+            var brands = await _unitOfWork.Brands.GetBrandsAsync();
 
-            return mapper.Map<List<Brand>,List<BrandResource>>(brands);
+            return _mapper.Map<IEnumerable<Brand>,IEnumerable<BrandResource>>(brands);
         }
     }
 }

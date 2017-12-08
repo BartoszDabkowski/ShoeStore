@@ -11,8 +11,8 @@ using System;
 namespace ShoeStore.Migrations
 {
     [DbContext(typeof(ShoeStoreDbContext))]
-    [Migration("20171130193937_AddSizeTable")]
-    partial class AddSizeTable
+    [Migration("20171208045607_SeedSizesTable")]
+    partial class SeedSizesTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -80,6 +80,19 @@ namespace ShoeStore.Migrations
                     b.ToTable("ShoeColor");
                 });
 
+            modelBuilder.Entity("ShoeStore.Models.ShoeSize", b =>
+                {
+                    b.Property<int>("ShoeId");
+
+                    b.Property<int>("SizeId");
+
+                    b.HasKey("ShoeId", "SizeId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("ShoeSizes");
+                });
+
             modelBuilder.Entity("ShoeStore.Models.ShoeStyle", b =>
                 {
                     b.Property<int>("ShoeId");
@@ -137,6 +150,19 @@ namespace ShoeStore.Migrations
                     b.HasOne("ShoeStore.Models.Shoe", "Shoe")
                         .WithMany("ShoeColors")
                         .HasForeignKey("ShoeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ShoeStore.Models.ShoeSize", b =>
+                {
+                    b.HasOne("ShoeStore.Models.Shoe", "Shoe")
+                        .WithMany("ShoeSizes")
+                        .HasForeignKey("ShoeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ShoeStore.Models.Size", "Size")
+                        .WithMany("ShoeSizes")
+                        .HasForeignKey("SizeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

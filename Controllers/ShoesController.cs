@@ -12,40 +12,31 @@ namespace ShoeStore.Controllers
     [Route("api/shoes")]    
     public class ShoesController : Controller
     {
-        private readonly ShoeStoreDbContext _context;
-        private readonly IMapper mapper;
-        public ShoesController(ShoeStoreDbContext context, IMapper mapper)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public ShoesController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.mapper = mapper;
-            _context = context;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IEnumerable<ShoeResource>> GetShoesAsync()
         {
-            var shoes = await _context.Shoes
-                .Include(s => s.Brand)
-                .Include(s => s.Styles)
-                    .ThenInclude(ss => ss.Style)
-                .Include(s => s.Colors)
-                    .ThenInclude(sc => sc.Color)
-                .ToListAsync();
+            var shoes = await _unitOfWork.Shoes.GetShoesAsync();
 
-            return mapper.Map<List<Shoe>, List<ShoeResource>>(shoes);
+            return _mapper.Map<IEnumerable<Shoe>, IEnumerable<ShoeResource>>(shoes);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetShoeAsync(int id)
         {
-            var shoe = await _context.Shoes
-                .Include(s => s.Styles)
-                .Include(s => s.Colors)
-                .SingleOrDefaultAsync(s => s.Id == id);
+            var shoe = await _unitOfWork.Shoes.GetShoeAsync(id);
 
             if(shoe == null)
                 return NotFound();
 
-            return Ok(mapper.Map<Shoe, SaveShoeResource>(shoe));
+            return Ok(_mapper.Map<Shoe, SaveShoeResource>(shoe));
         }
 
         [HttpPost]
@@ -54,12 +45,12 @@ namespace ShoeStore.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var shoe = mapper.Map<SaveShoeResource, Shoe>(shoeUploadResource);
+            var shoe = _mapper.Map<SaveShoeResource, Shoe>(shoeUploadResource);
 
-            _context.Shoes.Add(shoe);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Shoes.Add(shoe);
+            await _unitOfWork.CompleteAsync();
 
-            var result = mapper.Map<Shoe, SaveShoeResource>(shoe);
+            var result = _mapper.Map<Shoe, SaveShoeResource>(shoe);
             
             return Ok(result);
         }
@@ -70,32 +61,29 @@ namespace ShoeStore.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var shoe = await _context.Shoes
-                .Include(s => s.Styles)
-                .Include(s => s.Colors)
-                .SingleOrDefaultAsync(s => s.Id == id);
+            var shoe = await _unitOfWork.Shoes.GetShoeAsync(id);
 
             if(shoe == null)
                 return NotFound();
 
-            mapper.Map<SaveShoeResource, Shoe>(shoeUploadResource, shoe);
+            _mapper.Map<SaveShoeResource, Shoe>(shoeUploadResource, shoe);
 
-            await _context.SaveChangesAsync();
+            await _unitOfWork.CompleteAsync();
 
-            var result = mapper.Map<Shoe, SaveShoeResource>(shoe);
+            var result = _mapper.Map<Shoe, SaveShoeResource>(shoe);
             
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShoeAsync(int id){
-            var shoe = await _context.Shoes.FindAsync(id);
+            var shoe = await _unitOfWork.Shoes.GetShoeAsync(id, false);
 
             if(shoe == null)
                 return NotFound();
 
-            _context.Remove(shoe);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Shoes.Remove(shoe);
+            await _unitOfWork.CompleteAsync();
 
             return Ok(id);
         }
@@ -103,25 +91,25 @@ namespace ShoeStore.Controllers
         [HttpGet("styles")]
         public async Task<IEnumerable<KeyValuePairResource>> GetStylesAsync()
         {
-            var styles = await _context.Styles.ToListAsync();
+            var styles = await _unitOfWork.Styles.GetStylesAsync();
 
-            return mapper.Map<List<Style>,List<KeyValuePairResource>>(styles);
+            return _mapper.Map<IEnumerable<Style>,IEnumerable<KeyValuePairResource>>(styles);
         }
 
         [HttpGet("colors")]
         public async Task<IEnumerable<KeyValuePairResource>> GetColorsAsync()
         {
-            var colors = await _context.Colors.ToListAsync();
+            var colors = await _unitOfWork.Colors.GetColorsAsync();
 
-            return mapper.Map<List<Color>,List<KeyValuePairResource>>(colors);
+            return _mapper.Map<IEnumerable<Color>,IEnumerable<KeyValuePairResource>>(colors);
         }
 
         [HttpGet("sizes")]
         public async Task<IEnumerable<KeyValuePairResource>> GetSizesAsync()
         {
-            var sizes = await _context.Sizes.ToListAsync();
+            var sizes = await _unitOfWork.Sizes.GetSizesAsync();
 
-            return mapper.Map<List<Size>,List<KeyValuePairResource>>(sizes);
+            return _mapper.Map<IEnumerable<Size>,IEnumerable<KeyValuePairResource>>(sizes);
         }
     }
 }

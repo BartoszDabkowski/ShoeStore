@@ -12,6 +12,7 @@ namespace ShoeStore.Persistence
         public DbSet<Color> Colors { get; set; }
         public DbSet<ShoeColor> ShoeColor { get; set; }
         public DbSet<Size> Sizes { get; set; }
+        public DbSet<ShoeSize> ShoeSizes { get; set; }
 
         public ShoeStoreDbContext(DbContextOptions<ShoeStoreDbContext> options) 
             : base(options)
@@ -25,7 +26,7 @@ namespace ShoeStore.Persistence
 
             modelBuilder.Entity<ShoeStyle>()
                 .HasOne(sh => sh.Shoe)
-                .WithMany(ss => ss.Styles)
+                .WithMany(ss => ss.ShoeStyles)
                 .HasForeignKey(sh => sh.ShoeId);
 
             modelBuilder.Entity<ShoeStyle>()
@@ -38,13 +39,26 @@ namespace ShoeStore.Persistence
 
             modelBuilder.Entity<ShoeColor>()
                 .HasOne(s => s.Shoe)
-                .WithMany(sc => sc.Colors)
+                .WithMany(sc => sc.ShoeColors)
                 .HasForeignKey(s => s.ShoeId);
 
             modelBuilder.Entity<ShoeColor>()
                 .HasOne(c => c.Color)
                 .WithMany(sc => sc.ShoeColors)
                 .HasForeignKey(c =>c.ColorId);
+
+            modelBuilder.Entity<ShoeSize>().HasKey(sc => 
+              new { sc.ShoeId, sc.SizeId });
+
+            modelBuilder.Entity<ShoeSize>()
+                .HasOne(s => s.Shoe)
+                .WithMany(sc => sc.ShoeSizes)
+                .HasForeignKey(s => s.ShoeId);
+
+            modelBuilder.Entity<ShoeSize>()
+                .HasOne(c => c.Size)
+                .WithMany(sc => sc.ShoeSizes)
+                .HasForeignKey(c =>c.SizeId);
         }
     }
 }

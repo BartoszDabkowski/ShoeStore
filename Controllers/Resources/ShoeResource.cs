@@ -10,11 +10,13 @@ namespace ShoeStore.Controllers.Resources
         public KeyValuePairResource Brand{ get; set; }
         public ICollection<KeyValuePairResource> Styles { get; set; }
         public ICollection<KeyValuePairResource> Colors { get; set; }
+        public ICollection<KeyValuePairResource> Sizes { get; set; }
 
         public ShoeResource()
         {
             Styles = new Collection<KeyValuePairResource>();
             Colors = new Collection<KeyValuePairResource>();
+            Sizes = new Collection<KeyValuePairResource>();
         }
     }
 }

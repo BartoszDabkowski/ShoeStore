@@ -12,11 +12,13 @@ namespace ShoeStore.Controllers.Resources
         public string Name { get; set; }
         public ICollection<int> Styles { get; set; }
         public ICollection<int> Colors { get; set; }
+        public ICollection<int> Sizes { get; set; }
 
         public SaveShoeResource()
         {
             Styles = new Collection<int>();
             Colors = new Collection<int>();
+            Sizes = new Collection<int>();
         }
     }
 }
