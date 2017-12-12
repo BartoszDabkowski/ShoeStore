@@ -19,8 +19,6 @@ namespace ShoeStore.Persistence
                 .Include(s => s.Brand)
                 .Include(s => s.ShoeStyles)
                     .ThenInclude(ss => ss.Style)
-                .Include(s => s.ShoeColors)
-                    .ThenInclude(sc => sc.Color)
                 .ToListAsync();
         }
 
@@ -33,8 +31,6 @@ namespace ShoeStore.Persistence
                 .Include(s => s.Brand)
                 .Include(s => s.ShoeStyles)
                     .ThenInclude(ss => ss.Style)
-                .Include(s => s.ShoeColors)
-                    .ThenInclude(sc => sc.Color)
                 .SingleOrDefaultAsync(s => s.Id == id);
         }
 

@@ -10,9 +10,7 @@ namespace ShoeStore.Persistence
         public DbSet<Style> Styles { get; set; }
         public DbSet<ShoeStyle> ShoeStyles { get; set; }
         public DbSet<Color> Colors { get; set; }
-        public DbSet<ShoeColor> ShoeColor { get; set; }
         public DbSet<Size> Sizes { get; set; }
-        public DbSet<ShoeSize> ShoeSizes { get; set; }
 
         public ShoeStoreDbContext(DbContextOptions<ShoeStoreDbContext> options) 
             : base(options)
@@ -34,31 +32,20 @@ namespace ShoeStore.Persistence
                 .WithMany(ss => ss.ShoeStyles)
                 .HasForeignKey(st => st.StyleId);
 
-            modelBuilder.Entity<ShoeColor>().HasKey(sc => 
-              new { sc.ShoeId, sc.ColorId });
+            modelBuilder.Entity<Inventory>()
+                .HasOne(sh => sh.Shoe)
+                .WithMany(i => i.Inventory)
+                .HasForeignKey(sh => sh.ShoeId);
 
-            modelBuilder.Entity<ShoeColor>()
-                .HasOne(s => s.Shoe)
-                .WithMany(sc => sc.ShoeColors)
-                .HasForeignKey(s => s.ShoeId);
-
-            modelBuilder.Entity<ShoeColor>()
+            modelBuilder.Entity<Inventory>()
                 .HasOne(c => c.Color)
-                .WithMany(sc => sc.ShoeColors)
-                .HasForeignKey(c =>c.ColorId);
+                .WithMany(i => i.Inventory)
+                .HasForeignKey(c => c.ColorId);
 
-            modelBuilder.Entity<ShoeSize>().HasKey(sc => 
-              new { sc.ShoeId, sc.SizeId });
-
-            modelBuilder.Entity<ShoeSize>()
-                .HasOne(s => s.Shoe)
-                .WithMany(sc => sc.ShoeSizes)
-                .HasForeignKey(s => s.ShoeId);
-
-            modelBuilder.Entity<ShoeSize>()
-                .HasOne(c => c.Size)
-                .WithMany(sc => sc.ShoeSizes)
-                .HasForeignKey(c =>c.SizeId);
+            modelBuilder.Entity<Inventory>()
+                .HasOne(s => s.Size)
+                .WithMany(i => i.Inventory)
+                .HasForeignKey(s => s.SizeId);
         }
     }
 }

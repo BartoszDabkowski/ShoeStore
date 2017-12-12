@@ -14,14 +14,12 @@ namespace ShoeStore.Models
         public Brand Brand { get; set; }
         public int BrandId { get; set; }
         public ICollection<ShoeStyle> ShoeStyles { get; set; }
-        public ICollection<ShoeColor> ShoeColors { get; set; }
-        public ICollection<ShoeSize> ShoeSizes { get; set; }
+        public ICollection<Inventory> Inventory { get; set; }
 
         public Shoe()
         {
             ShoeStyles = new Collection<ShoeStyle>();
-            ShoeColors = new Collection<ShoeColor>();
-            ShoeSizes = new Collection<ShoeSize>();
+            Inventory = new Collection<Inventory>();
         }
     }
 }

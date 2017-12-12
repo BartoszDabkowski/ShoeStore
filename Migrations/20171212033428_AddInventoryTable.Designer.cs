@@ -11,9 +11,10 @@ using System;
 namespace ShoeStore.Migrations
 {
     [DbContext(typeof(ShoeStoreDbContext))]
-    partial class ShoeStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171212033428_AddInventoryTable")]
+    partial class AddInventoryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,24 +128,6 @@ namespace ShoeStore.Migrations
                     b.ToTable("Styles");
                 });
 
-            modelBuilder.Entity("ShoeStore.Models.Transaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Amount");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<int>("InventoryId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InventoryId");
-
-                    b.ToTable("Transaction");
-                });
-
             modelBuilder.Entity("ShoeStore.Models.Inventory", b =>
                 {
                     b.HasOne("ShoeStore.Models.Color", "Color")
@@ -181,14 +164,6 @@ namespace ShoeStore.Migrations
                     b.HasOne("ShoeStore.Models.Style", "Style")
                         .WithMany("ShoeStyles")
                         .HasForeignKey("StyleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ShoeStore.Models.Transaction", b =>
-                {
-                    b.HasOne("ShoeStore.Models.Inventory", "Inventory")
-                        .WithMany("Transaction")
-                        .HasForeignKey("InventoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

@@ -10,11 +10,11 @@ namespace ShoeStore.Models
         [Required]
         [Range(6, 16)]
         public double Name { get; set; }
-        public ICollection<ShoeSize> ShoeSizes { get; set; }
+        public ICollection<Inventory> Inventory { get; set; }
 
         public Size()
         {
-            ShoeSizes = new Collection<ShoeSize>();
+            Inventory = new Collection<Inventory>();
         }
     }
 }

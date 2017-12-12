@@ -5,31 +5,31 @@ namespace ShoeStore.Persistence
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ShoeStoreDbContext _context;
-        private readonly IShoeRepository _shoes;
-        private readonly IColorRepository _colors;
-        private readonly IStyleRepository _styles;
-        private readonly ISizeRepository _sizes;
-        private readonly IBrandRepository _brands;
+        private IShoeRepository _shoes;
+        private IColorRepository _colors;
+        private IStyleRepository _styles;
+        private ISizeRepository _sizes;
+        private IBrandRepository _brands;
         
 
         public IShoeRepository Shoes { get{
-            return _shoes == null ? new ShoeRepository(_context) : _shoes;
+            return _shoes = _shoes ?? new ShoeRepository(_context);
         }}
 
         public IColorRepository Colors { get{
-            return _colors == null ? new ColorRepository(_context) : _colors;
+            return _colors = _colors ?? new ColorRepository(_context);
         }}
 
         public IStyleRepository Styles { get{
-            return _styles == null ? new StyleRepository(_context) : _styles;
+            return _styles = _styles ?? new StyleRepository(_context);
         }}
 
         public ISizeRepository Sizes { get{
-            return _sizes == null ? new SizeRepository(_context) : _sizes;
+            return _sizes = _sizes ?? new SizeRepository(_context);
         }}
 
         public IBrandRepository Brands { get{
-            return _brands == null ? new BrandRepository(_context) : _brands;
+            return _brands = _brands ?? new BrandRepository(_context);
         }}
 
         public UnitOfWork(ShoeStoreDbContext context)

@@ -11,9 +11,10 @@ using System;
 namespace ShoeStore.Migrations
 {
     [DbContext(typeof(ShoeStoreDbContext))]
-    partial class ShoeStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171212005832_RemoveShoeColorAndShoeSizeTable")]
+    partial class RemoveShoeColorAndShoeSizeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,28 +49,6 @@ namespace ShoeStore.Migrations
                     b.ToTable("Colors");
                 });
 
-            modelBuilder.Entity("ShoeStore.Models.Inventory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("ColorId");
-
-                    b.Property<int>("ShoeId");
-
-                    b.Property<int>("SizeId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
-
-                    b.HasIndex("ShoeId");
-
-                    b.HasIndex("SizeId");
-
-                    b.ToTable("Inventory");
-                });
-
             modelBuilder.Entity("ShoeStore.Models.Shoe", b =>
                 {
                     b.Property<int>("Id")
@@ -86,6 +65,32 @@ namespace ShoeStore.Migrations
                     b.HasIndex("BrandId");
 
                     b.ToTable("Shoes");
+                });
+
+            modelBuilder.Entity("ShoeStore.Models.ShoeColor", b =>
+                {
+                    b.Property<int>("ShoeId");
+
+                    b.Property<int>("ColorId");
+
+                    b.HasKey("ShoeId", "ColorId");
+
+                    b.HasIndex("ColorId");
+
+                    b.ToTable("ShoeColor");
+                });
+
+            modelBuilder.Entity("ShoeStore.Models.ShoeSize", b =>
+                {
+                    b.Property<int>("ShoeId");
+
+                    b.Property<int>("SizeId");
+
+                    b.HasKey("ShoeId", "SizeId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("ShoeSizes");
                 });
 
             modelBuilder.Entity("ShoeStore.Models.ShoeStyle", b =>
@@ -127,47 +132,37 @@ namespace ShoeStore.Migrations
                     b.ToTable("Styles");
                 });
 
-            modelBuilder.Entity("ShoeStore.Models.Transaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Amount");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<int>("InventoryId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InventoryId");
-
-                    b.ToTable("Transaction");
-                });
-
-            modelBuilder.Entity("ShoeStore.Models.Inventory", b =>
-                {
-                    b.HasOne("ShoeStore.Models.Color", "Color")
-                        .WithMany("Inventory")
-                        .HasForeignKey("ColorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ShoeStore.Models.Shoe", "Shoe")
-                        .WithMany("Inventory")
-                        .HasForeignKey("ShoeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ShoeStore.Models.Size", "Size")
-                        .WithMany("Inventory")
-                        .HasForeignKey("SizeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("ShoeStore.Models.Shoe", b =>
                 {
                     b.HasOne("ShoeStore.Models.Brand", "Brand")
                         .WithMany("Shoes")
                         .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ShoeStore.Models.ShoeColor", b =>
+                {
+                    b.HasOne("ShoeStore.Models.Color", "Color")
+                        .WithMany("ShoeColors")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ShoeStore.Models.Shoe", "Shoe")
+                        .WithMany("ShoeColors")
+                        .HasForeignKey("ShoeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ShoeStore.Models.ShoeSize", b =>
+                {
+                    b.HasOne("ShoeStore.Models.Shoe", "Shoe")
+                        .WithMany("ShoeSizes")
+                        .HasForeignKey("ShoeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ShoeStore.Models.Size", "Size")
+                        .WithMany("ShoeSizes")
+                        .HasForeignKey("SizeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -181,14 +176,6 @@ namespace ShoeStore.Migrations
                     b.HasOne("ShoeStore.Models.Style", "Style")
                         .WithMany("ShoeStyles")
                         .HasForeignKey("StyleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ShoeStore.Models.Transaction", b =>
-                {
-                    b.HasOne("ShoeStore.Models.Inventory", "Inventory")
-                        .WithMany("Transaction")
-                        .HasForeignKey("InventoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
