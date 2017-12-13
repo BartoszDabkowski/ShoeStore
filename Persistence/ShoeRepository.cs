@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ShoeStore.Models;
+using System.Linq;
 
 namespace ShoeStore.Persistence
 {
@@ -16,10 +17,23 @@ namespace ShoeStore.Persistence
         public async Task<IEnumerable<Shoe>> GetShoesAsync()
         {
             return await _context.Shoes
-                .Include(s => s.Brand)
-                .Include(s => s.ShoeStyles)
-                    .ThenInclude(ss => ss.Style)
-                .ToListAsync();
+            .Select(s => new Shoe{
+                Id = s.Id,
+                Name = s.Name,
+                Brand = s.Brand,
+                BrandId = s.BrandId,
+                ShoeStyles = s.ShoeStyles.Select(ss => new ShoeStyle{
+                    StyleId = ss.StyleId,
+                    Style = ss.Style
+                }).ToList(),
+                Inventory = s.Inventory.Select(i => new Inventory{
+                    Id = i.Id,
+                    SizeId = i.SizeId,
+                    Size = i.Size,
+                    ColorId = i.ColorId,
+                    Color = i.Color
+                }).ToList()
+            }).ToListAsync();
         }
 
         public async Task<Shoe> GetShoeAsync(int id, bool includeRelated = true)

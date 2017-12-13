@@ -12,6 +12,7 @@ namespace ShoeStore.Models
         public Color Color { get; set; }
         public int SizeId { get; set; }
         public Size Size { get; set; }
+        public bool isDeleted {get; set;}
         public ICollection<Transaction> Transaction { get; set; }
 
         public Inventory()

@@ -10,6 +10,7 @@ namespace ShoeStore.Persistence
         private IStyleRepository _styles;
         private ISizeRepository _sizes;
         private IBrandRepository _brands;
+        private IInventoryRepository _inventory;
         
 
         public IShoeRepository Shoes { get{
@@ -30,6 +31,9 @@ namespace ShoeStore.Persistence
 
         public IBrandRepository Brands { get{
             return _brands = _brands ?? new BrandRepository(_context);
+        }}
+        public IInventoryRepository Inventory { get{
+            return _inventory = _inventory ?? new InventoryRepository(_context);
         }}
 
         public UnitOfWork(ShoeStoreDbContext context)

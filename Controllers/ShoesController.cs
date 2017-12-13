@@ -46,8 +46,8 @@ namespace ShoeStore.Controllers
                 return BadRequest(ModelState);
 
             var shoe = _mapper.Map<SaveShoeResource, Shoe>(shoeUploadResource);
-
             _unitOfWork.Shoes.Add(shoe);
+
             await _unitOfWork.CompleteAsync();
 
             var result = _mapper.Map<Shoe, SaveShoeResource>(shoe);

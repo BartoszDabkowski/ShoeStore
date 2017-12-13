@@ -9,6 +9,7 @@ namespace ShoeStore.Persistence
         IStyleRepository Styles { get;}
         ISizeRepository Sizes { get;}
         IBrandRepository Brands { get;}
+        IInventoryRepository Inventory { get;}
         Task CompleteAsync();
     }
 }
