@@ -1,0 +1,7 @@
+C:\Users\BDabkows\Documents\GitHub\ShoeStore\ShoeStore.Tests\bin\Debug\ShoeStore.Tests.dll
+C:\Users\BDabkows\Documents\GitHub\ShoeStore\ShoeStore.Tests\bin\Debug\ShoeStore.Tests.pdb
+C:\Users\BDabkows\Documents\GitHub\ShoeStore\ShoeStore.Tests\bin\Debug\nunit.framework.dll
+C:\Users\BDabkows\Documents\GitHub\ShoeStore\ShoeStore.Tests\bin\Debug\nunit.framework.xml
+C:\Users\BDabkows\Documents\GitHub\ShoeStore\ShoeStore.Tests\obj\Debug\ShoeStore.Tests.csproj.CoreCompileInputs.cache
+C:\Users\BDabkows\Documents\GitHub\ShoeStore\ShoeStore.Tests\obj\Debug\ShoeStore.Tests.dll
+C:\Users\BDabkows\Documents\GitHub\ShoeStore\ShoeStore.Tests\obj\Debug\ShoeStore.Tests.pdb
