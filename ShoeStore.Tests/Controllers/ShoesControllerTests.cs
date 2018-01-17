@@ -100,10 +100,25 @@ namespace ShoeStore.Tests.Controllers
             unitOfWork.Setup(u => u.Shoes.GetShoeAsync(It.IsAny<int>(), true)).Returns(Task.FromResult<Shoe>(null));
             var controller = new ShoesController(unitOfWork.Object, _mapper);
 
-            var result = await controller.UpdateShoesAsync(1, new SaveShoeResource());
+            var result = await controller.UpdateShoesAsync(It.IsAny<int>(), new SaveShoeResource());
 
             Assert.IsInstanceOf<NotFoundResult>(result);
         }
+        #endregion
+
+        #region DeleteShoeAsync Tests
+        [Test]
+        public async Task DeleteShoeAsync_ShoeInDatabase_ReturnsOk()
+        {
+            var unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(u => u.Shoes.GetShoeAsync(It.IsAny<int>(), false)).Returns(Task.FromResult(new Shoe()));
+            var controller = new ShoesController(unitOfWork.Object, _mapper);
+
+            var result = await controller.DeleteShoeAsync(It.IsAny<int>());
+
+            Assert.IsInstanceOf<OkObjectResult>(result);
+        }
+
 
         #endregion
     }
