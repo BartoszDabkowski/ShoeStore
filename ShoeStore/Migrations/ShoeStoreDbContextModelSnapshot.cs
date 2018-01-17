@@ -55,11 +55,11 @@ namespace ShoeStore.Migrations
 
                     b.Property<int>("ColorId");
 
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<int>("ShoeId");
 
                     b.Property<int>("SizeId");
-
-                    b.Property<bool>("isDeleted");
 
                     b.HasKey("Id");
 
@@ -78,6 +78,8 @@ namespace ShoeStore.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("BrandId");
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Name")
                         .IsRequired()

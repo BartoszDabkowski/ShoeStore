@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShoeStore.Models;
 using Microsoft.EntityFrameworkCore;
+using ShoeStore.Persistence.Interface;
 
 namespace ShoeStore.Persistence
 {

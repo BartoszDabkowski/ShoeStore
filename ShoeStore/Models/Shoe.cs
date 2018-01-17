@@ -15,6 +15,7 @@ namespace ShoeStore.Models
         public int BrandId { get; set; }
         public ICollection<ShoeStyle> ShoeStyles { get; set; }
         public ICollection<Inventory> Inventory { get; set; }
+        public bool IsDeleted { get; set; }
 
         public Shoe()
         {

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ShoeStore.Models;
 using System.Linq;
+using ShoeStore.Persistence.Interface;
 
 namespace ShoeStore.Persistence
 {
@@ -51,11 +52,6 @@ namespace ShoeStore.Persistence
         public void Add(Shoe shoe)
         {
             _context.Shoes.Add(shoe);
-        }
-
-        public void Remove(Shoe shoe)
-        {
-            _context.Shoes.Remove(shoe);
         }
     }
 }

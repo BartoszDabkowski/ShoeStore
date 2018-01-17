@@ -3,7 +3,6 @@ using System.Linq;
 using AutoMapper;
 using ShoeStore.Controllers.Resources;
 using ShoeStore.Models;
-using ShoeStore.Persistence;
 
 namespace ShoeStore.Mapping
 {
@@ -21,43 +20,53 @@ namespace ShoeStore.Mapping
                 .ForMember(sr => sr.Styles, opt => opt.MapFrom(s => s.ShoeStyles.Select(ss => new KeyValuePairResource{ Id = ss.Style.Id, Name = ss.Style.Name})))
                 .ForMember(sr => sr.Colors, opt => 
                     opt.MapFrom(s => s.Inventory
-                        .GroupBy(i => i.ColorId)
-                        .Select(g => g.First())
-                        .Select(i => new KeyValuePairResource{ Id = i.Color.Id, Name = i.Color.Name})))
+                        .GroupBy(i => i.Color.Id, (x, y) => new { Key = x, Value = y.FirstOrDefault() })
+                        .Select(i => new KeyValuePairResource{ Id = i.Value.Color.Id, Name = i.Value.Color.Name})))
                 .ForMember(sr => sr.Sizes, opt => 
                     opt.MapFrom(s => s.Inventory
-                        .GroupBy(i => i.SizeId)
-                        .Select(g => g.First())
-                        .Select(i => new KeyValuePairResource{ Id = i.Size.Id, Name = i.Size.Name.ToString()})));
+                        .GroupBy(i => i.Size.Id, (x, y) => new { Key = x, Value = y.FirstOrDefault() })
+                        .Select(i => new KeyValuePairResource{ Id = i.Value.Size.Id, Name = i.Value.Size.Name.ToString()})));
 
             CreateMap<Shoe, SaveShoeResource>()
-                .ForMember(sur => sur.Styles, opt => opt.MapFrom(s => s.ShoeStyles.Select(sur => sur.StyleId)));
+                .ForMember(sur => sur.Styles, opt => opt.MapFrom(s => s.ShoeStyles.Select(sur => sur.StyleId)))
+                .ForMember(sur => sur.Colors, opt => opt.MapFrom(s => s.Inventory
+                    .GroupBy(i => i.ColorId, (x, y) => new { Key = x, Value = y.FirstOrDefault() })
+                    .Select(i => i.Value.ColorId)))
+                .ForMember(sur => sur.Sizes, opt => opt.MapFrom(s => s.Inventory
+                    .GroupBy(i => i.SizeId, (x, y) => new { Key = x, Value = y.FirstOrDefault() })
+                    .Select(i => i.Value.SizeId)));
 
             // API to Domain Resource
             CreateMap<SaveShoeResource, Shoe>()
+                .ForMember(s => s.Id, opt => opt.Ignore())
+                .ForMember(s => s.Brand, opt => opt.Ignore())
                 .ForMember(s => s.ShoeStyles, opt => opt.Ignore())
                 .ForMember(s => s.Inventory, opt => opt.Ignore())
-                .AfterMap((sur, s) => {
+                .ForMember(s => s.IsDeleted, opt => opt.Ignore())
+                .AfterMap((ssr, s) =>
+                {
                     // Remove unselected styles
-                    var removedStyles = s.ShoeStyles.Where(st => !sur.Styles.Contains(st.StyleId)).ToList();
-                    foreach(var st in removedStyles)
+                    var removedStyles = s.ShoeStyles.Where(st => !ssr.Styles.Contains(st.StyleId)).ToList();
+                    foreach (var st in removedStyles)
                         s.ShoeStyles.Remove(st);
 
                     // Add new styles
-                    var addedStyles = sur.Styles.Where(id => !s.ShoeStyles.Any(st => st.StyleId == id))
-                        .Select(id => new ShoeStyle {StyleId = id});
-                    foreach(var st in addedStyles)
+                    var addedStyles = ssr.Styles.Where(id => !s.ShoeStyles.Any(st => st.StyleId == id))
+                        .Select(id => new ShoeStyle { StyleId = id });
+                    foreach (var st in addedStyles)
                         s.ShoeStyles.Add(st);
 
-                    foreach(var color in sur.Colors){
-                        foreach(var size in sur.Sizes){
-                            s.Inventory.Add(new Inventory{
-                                ShoeId = s.Id,
-                                ColorId = color,
-                                SizeId = size
-                            });
-                        }
-                    }
+                    // Soft Delete unselected colors
+                    var removedColors = s.Inventory.Where(i => !ssr.Colors.Contains(i.ColorId)).ToList();
+                    foreach (var c in removedColors)
+                        c.IsDeleted = true;
+
+                    // Add new Colors 
+                    var addedColors = ssr.Colors.Where(id => !s.Inventory.Any(i => i.ColorId == id))
+                        .Select(id => new Color { Id = id });
+                    foreach (var c in addedColors)
+                        foreach(var sizeId in ssr.Sizes)
+                            s.Inventory.Add(new Inventory { ShoeId = s.Id, ColorId = c.Id, SizeId = sizeId });
                 });
         }
     }

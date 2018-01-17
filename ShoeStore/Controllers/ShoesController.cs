@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ShoeStore.Controllers.Resources;
 using ShoeStore.Models;
 using ShoeStore.Persistence;
+using ShoeStore.Persistence.Interface;
 
 namespace ShoeStore.Controllers
 {
@@ -16,8 +17,10 @@ namespace ShoeStore.Controllers
         private readonly IMapper _mapper;
         public ShoesController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _unitOfWork = unitOfWork ?? 
+                throw new System.ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ??
+                throw new System.ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]
@@ -40,13 +43,21 @@ namespace ShoeStore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostShoesAsync([FromBody] SaveShoeResource shoeUploadResource)
+        public async Task<IActionResult> PostShoesAsync([FromBody] SaveShoeResource saveShoeResource)
         {
+            if (saveShoeResource == null)
+                return BadRequest("null value passed");
+
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var shoe = _mapper.Map<SaveShoeResource, Shoe>(shoeUploadResource);
+            var shoe = _mapper.Map<SaveShoeResource, Shoe>(saveShoeResource);
             _unitOfWork.Shoes.Add(shoe);
+
+            foreach (var invent in shoe.Inventory)
+            {
+                _unitOfWork.Inventory.Add(invent);
+            }
 
             await _unitOfWork.CompleteAsync();
 
@@ -58,7 +69,10 @@ namespace ShoeStore.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateShoesAsync(int id, [FromBody] SaveShoeResource shoeUploadResource)
         {
-            if(!ModelState.IsValid)
+            if (shoeUploadResource == null)
+                return BadRequest("null value passed");
+
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var shoe = await _unitOfWork.Shoes.GetShoeAsync(id);
@@ -82,7 +96,8 @@ namespace ShoeStore.Controllers
             if(shoe == null)
                 return NotFound();
 
-            _unitOfWork.Shoes.Remove(shoe);
+            shoe.IsDeleted = true;
+
             await _unitOfWork.CompleteAsync();
 
             return Ok(id);

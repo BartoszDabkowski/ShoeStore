@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ShoeStore.Controllers.Resources;
 using ShoeStore.Models;
 using ShoeStore.Persistence;
+using ShoeStore.Persistence.Interface;
 
 namespace ShoeStore.Controllers
 {
