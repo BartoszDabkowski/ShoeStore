@@ -19,7 +19,9 @@ const nonTreeShakableModules = [
     'bootstrap/scss/bootstrap.scss',
     'es6-promise',
     'es6-shim',
-    'event-source-polyfill'
+    'event-source-polyfill',
+    'ng2-toasty',
+    'ng2-toasty/bundles/style-bootstrap.css'
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
@@ -28,6 +30,7 @@ module.exports = (env) => {
         filename: "[name].css",
         disable: process.env.NODE_ENV === "development"
     });
+    //const extractCSS = new ExtractTextPlugin('[name]_css.css');
 
     const isDevBuild = !(env && env.prod);
     const sharedConfig = {
@@ -59,18 +62,21 @@ module.exports = (env) => {
         },
         output: { path: path.join(__dirname, 'wwwroot', 'dist') },
         module: {
-            rules: [{
-                test: /\.scss$/,
-                use: extractSass.extract({
-                    use: [{
-                        loader: "css-loader"
-                    }, {
-                        loader: "sass-loader"
-                    }],
-                    // use style-loader in development
-                    fallback: "style-loader"
-                })
-            }]
+            rules: [
+                //{ test: /\.css(\?|$)/, use: extractCSS.extract({ use: 'css-loader' }) },
+                {
+                    test: /\.scss|css$/,
+                    use: extractSass.extract({
+                        use: [{
+                            loader: "css-loader"
+                        }, {
+                            loader: "sass-loader"
+                        }],
+                        // use style-loader in development
+                        fallback: "style-loader"
+                    })
+                }
+            ]
         },
         plugins: [
             extractSass,
@@ -92,8 +98,10 @@ module.exports = (env) => {
             libraryTarget: 'commonjs2',
         },
         module: {
-            rules: [{
-                test: /\.scss$/,
+            rules: [
+                //{ test: /\.css(\?|$)/, use: extractCSS.extract({ use: 'css-loader' }) },
+                {
+                test: /\.scss|css$/,
                 use: extractSass.extract({
                     use: [{
                         loader: "css-loader"
@@ -103,7 +111,8 @@ module.exports = (env) => {
                     // use style-loader in development
                     fallback: "style-loader"
                 })
-            }]
+            }
+            ]
         },
         plugins: [
             extractSass,

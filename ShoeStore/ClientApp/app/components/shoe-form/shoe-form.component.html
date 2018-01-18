@@ -1,17 +1,21 @@
-<form (ngSubmit)="submit()">
+<ng2-toasty position="'top-right'"></ng2-toasty>
+
+<form (ngSubmit)="submit()" #f="ngForm">
     {{ shoe | json}}
     <div class="form-group">
         <label for="brand">Brand</label>
-        <select id="brand" class="form-control" [(ngModel)]="shoe.brandId" name="shoeBrand">
+        <select id="brand" class="form-control" [(ngModel)]="shoe.brandId" name="shoeBrand" required #brand="ngModel">
             <option value=""></option>
             <option *ngFor="let b of brands" value="{{ b.id }}">{{ b.name }}</option>
         </select>
     </div>
+    <div class="alert alert-danger" *ngIf="brand.touched && !brand.valid">Please specify the brand.</div>
 
     <div class="form-group">
         <label for="name">Name</label>
-        <input id="name" class="form-control" [(ngModel)]="shoe.name" name="shoeName"/>
+        <input id="name" class="form-control" [(ngModel)]="shoe.name" name="shoeName" required #name="ngModel"/>
     </div>
+    <div class="alert alert-danger" *ngIf="name.touched && !name.valid">Please specify the name.</div>
 
     <div class="row">
         <div class="col-sm">
@@ -32,5 +36,5 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!f.valid">Submit</button>
 </form>

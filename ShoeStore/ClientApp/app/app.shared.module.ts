@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
+import { ToastyModule } from 'ng2-toasty';
+
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './components/app/app.component';
@@ -25,6 +27,7 @@ import { BrandService } from './services/brand.service';
         CommonModule,
         HttpModule,
         FormsModule,
+        ToastyModule.forRoot(),
         NgbModule.forRoot(),
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
