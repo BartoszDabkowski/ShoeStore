@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ShoeStore.Models;
+using ShoeStore.Core.Models;
 
 namespace ShoeStore.Persistence
 {

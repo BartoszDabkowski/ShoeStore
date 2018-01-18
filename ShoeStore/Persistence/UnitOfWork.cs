@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using ShoeStore.Persistence.Interface;
+using ShoeStore.Core;
 
 namespace ShoeStore.Persistence
 {

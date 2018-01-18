@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using ShoeStore.Controllers.Resources;
-using ShoeStore.Models;
+using ShoeStore.Core.Models;
 
 namespace ShoeStore.Mapping
 {

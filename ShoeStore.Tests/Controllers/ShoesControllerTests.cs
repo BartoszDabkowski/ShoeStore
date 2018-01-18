@@ -3,7 +3,6 @@ using Moq;
 using NUnit.Framework;
 using ShoeStore.Controllers;
 using ShoeStore.Controllers.Resources;
-using ShoeStore.Models;
 using ShoeStore.Persistence;
 using System;
 using System.Collections.Generic;
@@ -11,8 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using DeepEqual.Syntax;
 using Microsoft.AspNetCore.Mvc;
+using ShoeStore.Core;
+using ShoeStore.Core.Models;
 using ShoeStore.Mapping;
-using ShoeStore.Persistence.Interface;
 
 namespace ShoeStore.Tests.Controllers
 {
@@ -57,7 +57,7 @@ namespace ShoeStore.Tests.Controllers
         }
 
         [Test]
-        public async Task PostShoeAsync_WhenCalled_ReturnsShoe()
+        public async Task PostShoeAsync_WhenCalled_ReturnsOk()
         {
             var unitOfWork = new Mock<IUnitOfWork>();
             unitOfWork.Setup(u => u.Shoes.Add(It.IsAny<Shoe>())).Verifiable();
@@ -75,8 +75,7 @@ namespace ShoeStore.Tests.Controllers
 
             var result = await controller.PostShoesAsync(saveShoeResource) as OkObjectResult;
 
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.Value.IsDeepEqual(saveShoeResource));
+            Assert.IsInstanceOf<OkObjectResult>(result);
         }
 
         [Test]
@@ -119,7 +118,17 @@ namespace ShoeStore.Tests.Controllers
             Assert.IsInstanceOf<OkObjectResult>(result);
         }
 
+        [Test]
+        public async Task DeleteShoeAsync_ShoeNotInDatabase_ReturnsNotFound()
+        {
+            var unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(u => u.Shoes.GetShoeAsync(It.IsAny<int>(), false)).Returns(Task.FromResult<Shoe>(null));
+            var controller = new ShoesController(unitOfWork.Object, _mapper);
 
+            var result = await controller.DeleteShoeAsync(It.IsAny<int>());
+
+            Assert.IsInstanceOf<NotFoundResult>(result);
+        }
         #endregion
     }
 }

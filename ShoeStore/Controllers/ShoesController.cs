@@ -4,9 +4,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShoeStore.Controllers.Resources;
-using ShoeStore.Models;
+using ShoeStore.Core;
+using ShoeStore.Core.Models;
 using ShoeStore.Persistence;
-using ShoeStore.Persistence.Interface;
 
 namespace ShoeStore.Controllers
 {
@@ -61,6 +61,8 @@ namespace ShoeStore.Controllers
 
             await _unitOfWork.CompleteAsync();
 
+            shoe = await _unitOfWork.Shoes.GetShoeAsync(shoe.Id);
+
             var result = _mapper.Map<Shoe, SaveShoeResource>(shoe);
             
             return Ok(result);
@@ -83,6 +85,8 @@ namespace ShoeStore.Controllers
             _mapper.Map<SaveShoeResource, Shoe>(shoeUploadResource, shoe);
 
             await _unitOfWork.CompleteAsync();
+
+            shoe = await _unitOfWork.Shoes.GetShoeAsync(shoe.Id);
 
             var result = _mapper.Map<Shoe, SaveShoeResource>(shoe);
             

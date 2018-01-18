@@ -2,7 +2,6 @@
 using AutoMapper;
 using NUnit.Framework;
 using ShoeStore.Controllers.Resources;
-using ShoeStore.Models;
 using ShoeStore.Mapping;
 using System.Collections.Generic;
 

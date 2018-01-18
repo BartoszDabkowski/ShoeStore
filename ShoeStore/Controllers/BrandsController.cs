@@ -4,9 +4,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShoeStore.Controllers.Resources;
-using ShoeStore.Models;
+using ShoeStore.Core;
+using ShoeStore.Core.Models;
 using ShoeStore.Persistence;
-using ShoeStore.Persistence.Interface;
 
 namespace ShoeStore.Controllers
 {

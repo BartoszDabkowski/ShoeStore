@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ShoeStore.Persistence;
 using FluentValidation.AspNetCore;
-using ShoeStore.Persistence.Interface;
+using ShoeStore.Core;
 using ShoeStore.Validation;
 
 namespace ShoeStore

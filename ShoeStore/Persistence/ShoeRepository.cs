@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ShoeStore.Models;
 using System.Linq;
-using ShoeStore.Persistence.Interface;
+using ShoeStore.Core;
+using ShoeStore.Core.Models;
 
 namespace ShoeStore.Persistence
 {
