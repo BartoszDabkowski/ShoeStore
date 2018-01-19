@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Rx';
 import { Brand } from '../../models/brand';
 import { SaveShoe } from '../../models/saveShoe';
 import { Component, OnInit } from '@angular/core';
-import { ToastyService } from 'ng2-toasty';
+import { ToastyService } from "ng2-toasty";
 
 @Component({
   selector: 'app-shoe-form',
@@ -60,26 +60,7 @@ constructor(
     }
 
   submit() {
-      this.shoeService.create(this.shoe)
-          .subscribe(
-          x => {
-              this.toastyService.success({
-                  title: 'Success',
-                  msg: 'Shoe has been posted.',
-                  theme: 'bootstrap',
-                  showClose: true,
-                  timeout: 5000
-              });
-          },
-          err => {
-              this.toastyService.error({
-                  title: 'Error',
-                  msg: 'An unexpected error happened.',
-                  theme: 'bootstrap',
-                  showClose: true,
-                  timeout: 5000
-              });
-          });
+      this.shoeService.create(this.shoe).subscribe(x => console.log(x));
   }
 
   private setShoe(s: SaveShoe) {

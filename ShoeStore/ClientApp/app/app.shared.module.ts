@@ -1,5 +1,5 @@
 
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -15,6 +15,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { ShoeFormComponent } from './components/shoe-form/shoe-form.component';
 import { ShoeService } from './services/shoe.service';
 import { BrandService } from './services/brand.service';
+import { AppErrorHandler } from "./components/app/app.error-handler";
 
 @NgModule({
     declarations: [
@@ -36,7 +37,10 @@ import { BrandService } from './services/brand.service';
             { path: '**', redirectTo: 'home' }
         ])
     ],
-    providers: [ShoeService, BrandService]
+    providers: [
+        {provide: ErrorHandler, useClass: AppErrorHandler},
+        ShoeService, BrandService
+    ]
 })
 export class AppModuleShared {
 }
