@@ -1,4 +1,6 @@
 
+import * as Raven from 'raven-js';
+
 import { NgModule, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +18,8 @@ import { ShoeFormComponent } from './components/shoe-form/shoe-form.component';
 import { ShoeService } from './services/shoe.service';
 import { BrandService } from './services/brand.service';
 import { AppErrorHandler } from "./components/app/app.error-handler";
+
+Raven.config('https://21356003fef14752a7981418bc98037b@sentry.io/274247').install();
 
 @NgModule({
     declarations: [
