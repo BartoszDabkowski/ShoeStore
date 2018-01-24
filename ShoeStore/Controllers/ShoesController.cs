@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +39,8 @@ namespace ShoeStore.Controllers
 
             if(shoe == null)
                 return NotFound();
+            // TODO: filter in repo
+            shoe.Inventory = shoe.Inventory.Where(x => !x.IsDeleted).ToList();
 
             return Ok(_mapper.Map<Shoe, ShoeResource>(shoe));
         }

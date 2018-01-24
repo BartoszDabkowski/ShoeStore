@@ -41,4 +41,14 @@ export class ShoeService {
       return this.http.post('api/shoes', shoe)
           .map(res => res.json());
   }
+
+  update(shoe: SaveShoe) {
+      return this.http.put('api/shoes/' + shoe.id, shoe)
+          .map(res => res.json());
+    }
+
+    delete(id: number) {
+        return this.http.delete('api/shoes/' + id)
+            .map(res => res.json());
+    }
 }

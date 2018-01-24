@@ -1,5 +1,6 @@
 import { ShoeService } from '../../services/shoe.service';
 import { SaveShoe } from '../../models/saveShoe';
+import { Shoe } from '../../models/shoe';
 import { Component, OnInit } from '@angular/core';
 import { ToastyService } from "ng2-toasty";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -82,15 +83,38 @@ export class ShoeFormComponent implements OnInit {
     }
 
     submit() {
-        this.shoeService.create(this.shoe).subscribe(x => console.log(x));
+        if (this.shoe.id)
+            this.shoeService.update(this.shoe)
+                .subscribe(x => {
+                    this.toastyService.success({
+                        title: 'Success',
+                        msg: 'The shoe was sucessfully updated.',
+                        theme: 'bootstrap',
+                        showClose: true,
+                        timeout: 5000
+                    });
+                });
+        else
+            this.shoeService.create(this.shoe).subscribe(x => console.log(x));
     }
 
-    private setShoe(s: SaveShoe) {
+    delete() {
+        if (confirm("Are you sure?")) {
+            this.shoeService.delete(this.shoe.id)
+                .subscribe(x => {
+                    this.router.navigate(['/home']);
+                });
+        }
+    }
+
+    private setShoe(s: Shoe) {
         this.shoe.id = s.id;
         this.shoe.name = s.name;
-        this.shoe.brandId = s.brandId;
+        console.log(s.brand);
+        this.shoe.brandId = s.brand.id;
         this.shoe.colors = s.colors.map((color: any) => color.id);
         this.shoe.styles = s.styles.map((style: any) => style.id);
         this.shoe.sizes = s.sizes.map((size: any) => size.id);
+        console.log(this.shoe);
     }
 }

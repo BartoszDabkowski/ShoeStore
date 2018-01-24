@@ -18,6 +18,7 @@ import { ShoeFormComponent } from './components/shoe-form/shoe-form.component';
 import { ShoeService } from './services/shoe.service';
 import { BrandService } from './services/brand.service';
 import { AppErrorHandler } from "./components/app/app.error-handler";
+import { ShoeListComponent } from './components/shoe-list/shoe-list.component';
 
 Raven.config('https://21356003fef14752a7981418bc98037b@sentry.io/274247').install();
 
@@ -26,7 +27,8 @@ Raven.config('https://21356003fef14752a7981418bc98037b@sentry.io/274247').instal
         AppComponent,
         HomeComponent,
         NavBarComponent,
-        ShoeFormComponent
+        ShoeFormComponent,
+        ShoeListComponent
     ],
     imports: [
         CommonModule,
@@ -37,8 +39,9 @@ Raven.config('https://21356003fef14752a7981418bc98037b@sentry.io/274247').instal
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
-            { path: 'shoe/new', component: ShoeFormComponent },
-            { path: 'shoe/:id', component: ShoeFormComponent },
+            { path: 'shoes/new', component: ShoeFormComponent },
+            { path: 'shoes/:id', component: ShoeFormComponent },
+            { path: 'shoes', component: ShoeListComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ],

@@ -17,7 +17,7 @@ namespace ShoeStore.Persistence
 
         public async Task<IEnumerable<Shoe>> GetShoesAsync()
         {
-            return await _context.Shoes
+            return await _context.Shoes.Where(s => !s.IsDeleted)
             .Select(s => new Shoe{
                 Id = s.Id,
                 Name = s.Name,

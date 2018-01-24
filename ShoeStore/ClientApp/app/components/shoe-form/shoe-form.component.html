@@ -12,7 +12,7 @@
 
     <div class="form-group">
         <label for="name">Name</label>
-        <input id="name" class="form-control" [(ngModel)]="shoe.name" name="shoeName" required #name="ngModel"/>
+        <input id="name" class="form-control" [(ngModel)]="shoe.name" name="shoeName" required #name="ngModel" />
     </div>
     <div class="alert alert-danger" *ngIf="name.touched && !name.valid">Please specify the name.</div>
 
@@ -20,7 +20,9 @@
         <div class="col-sm">
             <div *ngFor="let s of styles" class="form-check">
                 <label class="form-check-label" for="style-{{ s.id }}">
-                    <input class="form-check-input" id="style-{{ s.id }}" type="checkbox" value="{{s.id}}" (change)="onStyleToggle(s.id, $event)">
+                    <input class="form-check-input" id="style-{{ s.id }}" type="checkbox" value="{{s.id}}"
+                           (change)="onStyleToggle(s.id, $event)"
+                           [checked]="shoe.styles.includes(s.id)">
                     {{s.name}}
                 </label>
             </div>
@@ -28,7 +30,9 @@
         <div class="col-sm">
             <div *ngFor="let c of colors" class="form-check">
                 <label class="form-check-label" for="color-{{ c.id }}">
-                    <input class="form-check-input" id="color-{{ c.id }}" type="checkbox" value="{{c.id}}" (change)="onColorToggle(c.id, $event)">
+                    <input class="form-check-input" id="color-{{ c.id }}" type="checkbox" value="{{c.id}}"
+                           (change)="onColorToggle(c.id, $event)"
+                           [checked]="shoe.colors.includes(c.id)">
                     {{c.name}}
                 </label>
             </div>
@@ -36,4 +40,6 @@
     </div>
 
     <button type="submit" class="btn btn-primary" [disabled]="!f.valid">Submit</button>
+    <button *ngIf="shoe.id"
+            type="button" class="btn btn-danger" (click)="delete()">Delete</button>
 </form>

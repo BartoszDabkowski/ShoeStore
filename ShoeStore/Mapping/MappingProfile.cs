@@ -61,8 +61,13 @@ namespace ShoeStore.Mapping
                     foreach (var c in removedColors)
                         c.IsDeleted = true;
 
+                    // Re-add soft deleted colors
+                    var reAddedColors = s.Inventory.Where(i => ssr.Colors.Contains(i.ColorId) && i.IsDeleted).ToList();
+                    foreach (var c in reAddedColors)
+                        c.IsDeleted = false;
+
                     // Add new Colors 
-                    var addedColors = ssr.Colors.Where(id => !s.Inventory.Any(i => i.ColorId == id))
+                    var addedColors = ssr.Colors.Where(id => !s.Inventory.Any(i => i.ColorId == id && !i.IsDeleted))
                         .Select(id => new Color { Id = id });
                     foreach (var c in addedColors)
                         foreach(var sizeId in ssr.Sizes)
