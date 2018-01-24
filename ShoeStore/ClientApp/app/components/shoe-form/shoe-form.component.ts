@@ -1,9 +1,10 @@
 import { ShoeService } from '../../services/shoe.service';
-import { Subscription } from 'rxjs/Rx';
-import { Brand } from '../../models/brand';
 import { SaveShoe } from '../../models/saveShoe';
 import { Component, OnInit } from '@angular/core';
 import { ToastyService } from "ng2-toasty";
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/Observable/forkJoin';
 
 @Component({
   selector: 'app-shoe-form',
@@ -11,60 +12,85 @@ import { ToastyService } from "ng2-toasty";
   styleUrls: ['./shoe-form.component.css']
 })
 export class ShoeFormComponent implements OnInit {
-brands: Subscription;
-styles: Subscription;
-colors: Subscription;
-shoe: SaveShoe = {
-    name: "",
-    brandId: 0,
-    styles: [],
-    colors: [],
-    sizes: []
-}
+    brands: any[];
+    styles: any[];
+    colors: any[];
+    sizes: any[];
+    shoe: SaveShoe = {
+        id: 0,
+        name: "",
+        brandId: 0,
+        styles: [],
+        colors: [],
+        sizes: []
+    }
 
-constructor(
-    private shoeService: ShoeService,
-    private toastyService: ToastyService) { }
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private shoeService: ShoeService,
+        private toastyService: ToastyService) {
 
-  ngOnInit() {
-    this.brands = this.shoeService.getBrands().subscribe(brands =>
-      this.brands = brands);
+        route.params.subscribe(p => {
+            this.shoe.id = +p['id'];
+        });
+    }
 
-    this.styles = this.shoeService.getStyles().subscribe(styles =>
-      this.styles = styles);
+    ngOnInit() {
+        var sources = [
+            this.shoeService.getBrands(),
+            this.shoeService.getStyles(),
+            this.shoeService.getColors(),
+            this.shoeService.getSizes()
+        ];
+        if (this.shoe.id)
+            sources.push(this.shoeService.getShoe(this.shoe.id));
+        
+        Observable.forkJoin(sources).subscribe(data => {
+            this.brands = data[0];
+            this.styles = data[1];
+            this.colors = data[2];
+            this.sizes = data[3];
 
-    this.colors = this.shoeService.getColors().subscribe(colors =>
-        this.colors = colors);
+            if (this.shoe.id)
+                this.setShoe(data[4]);
+            else 
+                this.shoe.sizes = this.sizes.map((size: any) => size.id);
 
-    this.shoeService.getSizes().subscribe(sizes =>
-        this.shoe.sizes = sizes.map((size: any) => size.id)
-    );
-  }
+        }, err => {
+            if (err.status === 404)
+                this.router.navigate(['/home']);
+        });
+    }
 
-  onColorToggle(colorId: number, $event: any) {
-      if ($event.target.checked) {
-          this.shoe.colors.push(colorId);
-      } else {
-          const index = this.shoe.colors.indexOf(colorId);
-          this.shoe.colors.splice(index, 1);
-      }
-  }
+    onColorToggle(colorId: number, $event: any) {
+        if ($event.target.checked) {
+            this.shoe.colors.push(colorId);
+        } else {
+            var index = this.shoe.colors.indexOf(colorId);
+            this.shoe.colors.splice(index, 1);
+        }
+    }
 
     onStyleToggle(styleId: number, $event: any) {
         if ($event.target.checked) {
             this.shoe.styles.push(styleId);
         } else {
-            const index = this.shoe.styles.indexOf(styleId);
+            var index = this.shoe.styles.indexOf(styleId);
             this.shoe.styles.splice(index, 1);
         }
     }
 
-  submit() {
-      this.shoeService.create(this.shoe).subscribe(x => console.log(x));
-  }
+    submit() {
+        this.shoeService.create(this.shoe).subscribe(x => console.log(x));
+    }
 
-  private setShoe(s: SaveShoe) {
-      this.shoe.name = s.name;
-      this.shoe.brandId = s.brandId;
-  }
+    private setShoe(s: SaveShoe) {
+        this.shoe.id = s.id;
+        this.shoe.name = s.name;
+        this.shoe.brandId = s.brandId;
+        this.shoe.colors = s.colors.map((color: any) => color.id);
+        this.shoe.styles = s.styles.map((style: any) => style.id);
+        this.shoe.sizes = s.sizes.map((size: any) => size.id);
+    }
 }

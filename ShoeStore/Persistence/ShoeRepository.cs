@@ -44,8 +44,9 @@ namespace ShoeStore.Persistence
 
             return await _context.Shoes
                 .Include(s => s.Brand)
-                .Include(s => s.ShoeStyles)
-                    .ThenInclude(ss => ss.Style)
+                .Include(s => s.Inventory).ThenInclude(i => i.Color)
+                .Include(s => s.Inventory).ThenInclude(i => i.Size)
+                .Include(s => s.ShoeStyles).ThenInclude(ss => ss.Style)
                 .SingleOrDefaultAsync(s => s.Id == id);
         }
 

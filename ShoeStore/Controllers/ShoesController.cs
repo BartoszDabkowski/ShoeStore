@@ -39,7 +39,7 @@ namespace ShoeStore.Controllers
             if(shoe == null)
                 return NotFound();
 
-            return Ok(_mapper.Map<Shoe, SaveShoeResource>(shoe));
+            return Ok(_mapper.Map<Shoe, ShoeResource>(shoe));
         }
 
         [HttpPost]

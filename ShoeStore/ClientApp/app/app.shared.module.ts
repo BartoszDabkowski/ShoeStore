@@ -38,6 +38,7 @@ Raven.config('https://21356003fef14752a7981418bc98037b@sentry.io/274247').instal
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'shoe/new', component: ShoeFormComponent },
+            { path: 'shoe/:id', component: ShoeFormComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ],
