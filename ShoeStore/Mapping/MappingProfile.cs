@@ -11,6 +11,8 @@ namespace ShoeStore.Mapping
         public MappingProfile()
         {
             // Domain to API Resource
+            CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
+            CreateMap<ShoeQueryResource, ShoeQuery>();
             CreateMap<Brand, BrandResource>();
             CreateMap<Style, KeyValuePairResource>();
             CreateMap<Color, KeyValuePairResource>();

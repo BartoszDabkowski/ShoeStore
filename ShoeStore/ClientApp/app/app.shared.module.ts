@@ -19,6 +19,7 @@ import { ShoeService } from './services/shoe.service';
 import { BrandService } from './services/brand.service';
 import { AppErrorHandler } from "./components/app/app.error-handler";
 import { ShoeListComponent } from './components/shoe-list/shoe-list.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 Raven.config('https://21356003fef14752a7981418bc98037b@sentry.io/274247').install();
 
@@ -28,7 +29,8 @@ Raven.config('https://21356003fef14752a7981418bc98037b@sentry.io/274247').instal
         HomeComponent,
         NavBarComponent,
         ShoeFormComponent,
-        ShoeListComponent
+        ShoeListComponent,
+        PaginationComponent
     ],
     imports: [
         CommonModule,

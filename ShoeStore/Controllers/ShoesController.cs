@@ -25,11 +25,13 @@ namespace ShoeStore.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ShoeResource>> GetShoesAsync()
+        public async Task<QueryResultResource<ShoeResource>> GetShoesAsync(ShoeQueryResource shoeQueryResource)
         {
-            var shoes = await _unitOfWork.Shoes.GetShoesAsync();
+            var filter = _mapper.Map<ShoeQueryResource, ShoeQuery>(shoeQueryResource);
 
-            return _mapper.Map<IEnumerable<Shoe>, IEnumerable<ShoeResource>>(shoes);
+            var queryResult = await _unitOfWork.Shoes.GetShoesAsync(filter);
+
+            return _mapper.Map<QueryResult<Shoe>, QueryResultResource<ShoeResource>>(queryResult);
         }
 
         [HttpGet("{id}")]
