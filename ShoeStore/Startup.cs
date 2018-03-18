@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ShoeStore.Persistence;
 using FluentValidation.AspNetCore;
 using ShoeStore.Core;
+using ShoeStore.Core.Models;
 using ShoeStore.Validation;
 
 namespace ShoeStore
@@ -28,6 +29,7 @@ namespace ShoeStore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IShoeRepository, ShoeRepository>();
             

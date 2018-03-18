@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
 
 import { ToastyModule } from 'ng2-toasty';
 
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './components/app/app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -20,6 +20,7 @@ import { BrandService } from './services/brand.service';
 import { AppErrorHandler } from "./components/app/app.error-handler";
 import { ShoeListComponent } from './components/shoe-list/shoe-list.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { ViewShoeComponent } from './components/view-shoe/view-shoe.component';
 
 Raven.config('https://21356003fef14752a7981418bc98037b@sentry.io/274247').install();
 
@@ -30,7 +31,8 @@ Raven.config('https://21356003fef14752a7981418bc98037b@sentry.io/274247').instal
         NavBarComponent,
         ShoeFormComponent,
         ShoeListComponent,
-        PaginationComponent
+        PaginationComponent,
+        ViewShoeComponent
     ],
     imports: [
         CommonModule,
@@ -42,7 +44,8 @@ Raven.config('https://21356003fef14752a7981418bc98037b@sentry.io/274247').instal
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'shoes/new', component: ShoeFormComponent },
-            { path: 'shoes/:id', component: ShoeFormComponent },
+            { path: 'shoes/edit/:id', component: ShoeFormComponent },
+            { path: 'shoes/:id', component: ViewShoeComponent },
             { path: 'shoes', component: ShoeListComponent },
             { path: '**', redirectTo: 'home' }
         ])

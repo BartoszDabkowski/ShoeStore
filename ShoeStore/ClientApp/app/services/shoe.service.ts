@@ -25,7 +25,7 @@ export class ShoeService {
   }
 
   getShoe(id: number) {
-      return this.http.get(this.shoesEndpoint + id)
+      return this.http.get(this.shoesEndpoint + '/' + id)
           .map(res => res.json());
   }
 

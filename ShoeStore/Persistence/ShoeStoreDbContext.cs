@@ -13,6 +13,7 @@ namespace ShoeStore.Persistence
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
         public DbSet<Transaction> Transaction { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
         public ShoeStoreDbContext(DbContextOptions<ShoeStoreDbContext> options) 
             : base(options)
@@ -48,6 +49,7 @@ namespace ShoeStore.Persistence
                 .HasOne(s => s.Size)
                 .WithMany(i => i.Inventory)
                 .HasForeignKey(s => s.SizeId);
+
         }
     }
 }

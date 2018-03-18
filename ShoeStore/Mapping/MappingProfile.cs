@@ -17,6 +17,7 @@ namespace ShoeStore.Mapping
             CreateMap<Style, KeyValuePairResource>();
             CreateMap<Color, KeyValuePairResource>();
             CreateMap<Size, KeyValuePairResource>();
+            CreateMap<Photo, PhotoResource>();
             CreateMap<Shoe, ShoeResource>()
                 .ForMember(sr => sr.Brand, opt => opt.MapFrom(s => new KeyValuePairResource{ Id = s.Brand.Id, Name = s.Brand.Name}))
                 .ForMember(sr => sr.Styles, opt => opt.MapFrom(s => s.ShoeStyles.Select(ss => new KeyValuePairResource{ Id = ss.Style.Id, Name = ss.Style.Name})))

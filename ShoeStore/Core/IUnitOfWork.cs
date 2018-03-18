@@ -10,6 +10,7 @@ namespace ShoeStore.Core
         ISizeRepository Sizes { get;}
         IBrandRepository Brands { get;}
         IInventoryRepository Inventory { get;}
+        IPhotoRepository Photos { get; }
         Task CompleteAsync();
     }
 }
